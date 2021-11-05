@@ -29,7 +29,6 @@ const JobFamilyService = {
     let formattedRoles = []
 
     $(roles).each( (i, role) => {
-      console.log(role)
       formattedRoles.push({
         name: $(role).text(),
       })
