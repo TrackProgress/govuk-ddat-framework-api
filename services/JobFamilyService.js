@@ -3,17 +3,12 @@ import * as cheerio from 'cheerio';
 
 const JobFamilyService = {
   async getJobFamilyList() {
-    const contentApiResponse = await GovukContentApiService.getContentApi(
-      "/government/collections/digital-data-and-technology-profession-capability-framework"
-    )
-
+    let jobFamilyList = []
     const contentHtmlResponse = await GovukContentApiService.getContentHtml(
       "/government/collections/digital-data-and-technology-profession-capability-framework"
     )
-
     const $ = cheerio.load(contentHtmlResponse)
 
-    let jobFamilyList = []
     $('.group-title').each( (i, jobFamilyElement) => {
       let familyName = $(jobFamilyElement).text()
       let id = familyName.toLowerCase().replace(/\s+/g, '-')
@@ -31,7 +26,6 @@ const JobFamilyService = {
 
   getRoles($, jobFamilyElement) {
     let roles = $(jobFamilyElement).next().next().find('.gem-c-document-list .gem-c-document-list__item-title')
-
     let formattedRoles = []
 
     $(roles).each( (i, role) => {
