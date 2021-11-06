@@ -19,7 +19,7 @@ const RoleGuidanceService = {
       description: content.description,
       last_updated_at: content.updated_at,
       introduction: introduction,
-      role_levels: roleLevels,
+      levels: roleLevels,
     }
 
     return roleData
