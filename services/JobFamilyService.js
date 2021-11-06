@@ -31,7 +31,7 @@ const JobFamilyService = {
     $(roles).each( (i, role) => {
       formattedRoles.push({
         name: $(role).text(),
-        apiPath: `/api/role${$(role).attr('href')}`,
+        apiPath: `/api${$(role).attr('href')}`,
       })
     })
 
