@@ -90,10 +90,15 @@ const RoleGuidanceService = {
     data.subroles.forEach( (subrole, i) => {
       let _skills = []
       subrole.skills.each( (i, skill) => {
+        let skillsArray = $(skill).text().split(".").filter(n => n)
+        let description = skillsArray.slice(1, -1).join(". ").trim() + "."
+        let skillLevel = skillsArray[skillsArray.length - 1].match(/\(Relevant skill(s?) level: (.*?)\)/)
+        skillLevel = skillLevel[skillLevel.length - 1]
+
         _skills.push( {
           name: $(skill).find('strong').text(),
-          description: $(skill).text().split(".").slice(1, -1).join(". ").trim() + ".",
-          level: $(skill).text().substring(3).match(/\(Relevant skill level: (.*?)\)/)[1]
+          description: description,
+          level: skillLevel
         })
       })
       data.subroles[i].skills = _skills
