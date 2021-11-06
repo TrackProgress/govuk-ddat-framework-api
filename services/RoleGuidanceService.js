@@ -42,7 +42,7 @@ const RoleGuidanceService = {
 
     return {
       title: section.text(),
-      pretext: section.next().text(),
+      summary_pretext: section.next().text(),
       summary: summary,
       skills_subheading: section.next().next().next().text(),
       skills: skills,
@@ -50,19 +50,61 @@ const RoleGuidanceService = {
   },
 
   getRoleLevelData($, section) {
-    let skills = []
+    let data = {
+      title: $(section).text(),
+      skills: [],
+      subroles: [],
+    }
 
-    section.next().next().find('li').each( (i, skill) => {
-      skills.push( {
-        name: $(skill).find('strong').text(),
-        description: $(skill).text().split(".").slice(1, -1).join(". ").trim() + ".",
-        level: $(skill).text().substring(3).match(/\(Relevant skill level: (.*?)\)/)[1]
+    if (section.next().first().get(0).tagName === "p") {
+      data.summary_pretext = section.next().text()
+      data.summary = []
+
+      section.next().next().find('li').each( (i, skill) => {
+        data.summary.push( $(skill).text() )
       })
+
+      if (section.next().next().next().get(0).tagName === "p") {
+        data.summary_posttext = section.next().next().next().text()
+        data.subroles.push({
+          heading: section.next().next().next().next().text(),
+          skills: section.next().next().next().next().next().find('li')
+        })
+        data.subroles.push({
+          heading: section.next().next().next().next().next().next().text(),
+          skills: section.next().next().next().next().next().next().next().find('li')
+        })
+      } else {
+        data.subroles.push({
+          heading: section.next().next().next().text(),
+          skills: section.next().next().next().next().find('li')
+        })
+      }
+    } else {
+      data.subroles.push({
+        heading: section.next().text(),
+        skills: section.next().next().find('li')
+      })
+    }
+
+    data.subroles.forEach( (subrole, i) => {
+      let _skills = []
+      subrole.skills.each( (i, skill) => {
+        _skills.push( {
+          name: $(skill).find('strong').text(),
+          description: $(skill).text().split(".").slice(1, -1).join(". ").trim() + ".",
+          level: $(skill).text().substring(3).match(/\(Relevant skill level: (.*?)\)/)[1]
+        })
+      })
+      data.subroles[i].skills = _skills
     })
 
     return {
-      title: $(section).text(),
-      skills: skills,
+      title: data.title,
+      summary_pretext: data.summary_pretext,
+      summary: data.summary,
+      summary_posttext: data.summary_posttext,
+      subroles: data.subroles,
     }
   },
 }
