@@ -26,16 +26,26 @@ const RoleGuidanceService = {
   },
 
   getIntroSection($, section) {
-    let roleSummary = []
-    
+    let summary = []
+    let skills = []
+
     section.next().next().find('li').each( (i, skill) => {
-      roleSummary.push( $(skill).text() )
+      summary.push( $(skill).text() )
+    })
+
+    section.next().next().next().next().next().find('li').each( (i, skill) => {
+      skills.push( {
+        name: $(skill).find('strong').text(),
+        description: $(skill).text().split(".").slice(1).join(". ").trim(),
+      } )
     })
 
     return {
       title: section.text(),
       pretext: section.next().text(),
-      role_summary: roleSummary,
+      summary: summary,
+      skills_subheading: section.next().next().next().text(),
+      skills: skills,
     }
   },
 
