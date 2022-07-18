@@ -2,7 +2,7 @@ import GovukContentApiService from './GovukContentApiService'
 import * as cheerio from 'cheerio';
 
 const JobFamilyService = {
-  async getJobFamilyList() {
+  async getJobFamilyList(url = '') {
     let jobFamilyList = []
     const contentHtmlResponse = await GovukContentApiService.getContentHtml(
       "/government/collections/digital-data-and-technology-profession-capability-framework"
@@ -12,7 +12,7 @@ const JobFamilyService = {
     $('.group-title').each( (i, jobFamilyElement) => {
       let familyName = $(jobFamilyElement).text()
       let id = familyName.toLowerCase().replace(/\s+/g, '-')
-      let roles = this.getRoles($, jobFamilyElement)
+      let roles = this.getRoles($, jobFamilyElement, url)
 
       jobFamilyList.push({
         id: id,
@@ -24,14 +24,14 @@ const JobFamilyService = {
     return jobFamilyList
   },
 
-  getRoles($, jobFamilyElement) {
+  getRoles($, jobFamilyElement, url) {
     let roles = $(jobFamilyElement).next().next().find('.gem-c-document-list .gem-c-document-list__item-title')
     let formattedRoles = []
 
     $(roles).each( (i, role) => {
       formattedRoles.push({
         name: $(role).text(),
-        apiPath: `/api${$(role).attr('href')}`,
+        api_path: `${url}/api${$(role).attr('href')}`,
       })
     })
 

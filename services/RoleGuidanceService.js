@@ -14,6 +14,7 @@ const RoleGuidanceService = {
     })
 
     let roleData = {
+      "@source_url": `https://www.gov.uk/guidance/${roleId}`,
       id: content.content_id,
       title: content.title,
       description: content.description,
