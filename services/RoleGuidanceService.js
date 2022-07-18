@@ -34,7 +34,11 @@ const RoleGuidanceService = {
       summary.push( $(skill).text() )
     })
 
-    section.next().next().next().next().next().find('li').each( (i, skill) => {
+    let _skillsSection = summary.length
+      ? section.next().next().next().next().next().find('li')
+      : section.next().next().next().next().find('li')
+
+    _skillsSection.each( (i, skill) => {
       skills.push( {
         name: $(skill).find('strong').text(),
         description: $(skill).text().split(".").slice(1).join(". ").trim(),
