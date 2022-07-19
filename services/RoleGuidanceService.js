@@ -103,6 +103,7 @@ const RoleGuidanceService = {
         _skills.push( {
           name: $(skill).find('strong').text(),
           description: description,
+          requirements: skillsArray.slice(1, -1).map(n => n.trim() + "."),
           level: skillLevel
         })
       })
