@@ -7,10 +7,6 @@ export default async function handler(req, res) {
   let data = {
     id: role.id,
     title: role.title,
-    description: role.description,
-    govuk_url: role.govuk_url,
-    last_updated_at: role.last_updated_at,
-    introduction: role.introduction,
     skills: []
   }
 
@@ -34,6 +30,8 @@ export default async function handler(req, res) {
           author_logo: "https://assets.trackprogress.io/partners/govuk/branding/govuk-apple-touch-icon-180x180.png",
           author_description: "The DDAT Capability Framework describes the job roles in the Digital, Data and Technology (DDaT) Profession and provides details of the skills needed to work at each role level.\n",
           learn_more_url: role.govuk_url,
+          banner_url: "https://assets.trackprogress.io/partners/govuk/banner/gds-accessibility-lab.jpeg", // needs to be changed
+          last_updated_at: role.last_updated_at,
           what: "",
           why: "",
           resources: [
