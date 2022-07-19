@@ -32,8 +32,8 @@ export default async function handler(req, res) {
           learn_more_url: role.govuk_url,
           banner_url: "https://assets.trackprogress.io/partners/govuk/banner/gds-accessibility-lab.jpeg", // needs to be changed
           last_updated_at: role.last_updated_at,
-          what: "",
-          why: "",
+          what: skillDesc,
+          why: `This will help you understand and learn ${skill.name} as a ${role.title}.`,
           resources: [
             {
               label: `${role.title} (DDAT Framework)`,
