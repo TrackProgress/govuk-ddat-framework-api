@@ -32,6 +32,7 @@ const JobFamilyService = {
       formattedRoles.push({
         name: $(role).text(),
         api_path: `${url}/api${$(role).attr('href')}`,
+        skills_api_path: `${url}/api${$(role).attr('href')}/skills`,
       })
     })
 
