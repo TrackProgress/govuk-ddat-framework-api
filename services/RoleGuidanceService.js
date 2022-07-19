@@ -58,56 +58,43 @@ const RoleGuidanceService = {
     let data = {
       title: $(section).text(),
       skills: [],
-      subroles: [],
+      sub_roles: [],
     }
 
-    if (section.next().first().get(0).tagName === "p") {
-      data.summary_pretext = section.next().text()
+    let _nextSection = section.next()
+
+    if (_nextSection.first().get(0).tagName === "p") {
+      data.summary_pretext = _nextSection.text()
       data.summary = []
 
-      section.next().next().find('li').each( (i, skill) => {
+      if (_nextSection.next().get(0).tagName === "p") {
+        data.summary_pretext += _nextSection.next().text()
+        _nextSection = _nextSection.next()
+      }
+
+      _nextSection.next().find('li').each( (i, skill) => {
         data.summary.push( $(skill).text() )
       })
 
-      if (section.next().next().next().get(0).tagName === "p") {
-        data.summary_posttext = section.next().next().next().text()
-        data.subroles.push({
-          heading: section.next().next().next().next().text(),
-          skills: section.next().next().next().next().next().find('li')
-        })
-        data.subroles.push({
-          heading: section.next().next().next().next().next().next().text(),
-          skills: section.next().next().next().next().next().next().next().find('li')
-        })
-      } else {
-        data.subroles.push({
-          heading: section.next().next().next().text(),
-          skills: section.next().next().next().next().find('li')
-        })
-      }
-    } else {
-      data.subroles.push({
-        heading: section.next().text(),
-        skills: section.next().next().find('li')
-      })
+      _nextSection = data.summary.length ? _nextSection.next() : _nextSection
+      _nextSection = _nextSection.next()
     }
 
-    data.subroles.forEach( (subrole, i) => {
-      let _skills = []
-      subrole.skills.each( (i, skill) => {
-        let skillsArray = $(skill).text().split(".").filter(n => n)
-        let description = skillsArray.slice(1, -1).join(". ").trim() + "."
-        let skillLevel = skillsArray[skillsArray.length - 1].match(/\(Relevant skill(s?) level: (.*?)\)/)
-        skillLevel = skillLevel[skillLevel.length - 1]
+    data.skills = _nextSection.next().find('li')
 
-        _skills.push( {
-          name: $(skill).find('strong').text(),
-          description: description,
-          requirements: skillsArray.slice(1, -1).map(n => n.trim() + "."),
-          level: skillLevel
-        })
+    let _skills = []
+    data.skills.each( (i, skill) => {
+      let skillsArray = $(skill).text().split(".").filter(n => n)
+      let description = skillsArray.slice(1, -1).join(". ").trim() + "."
+      let skillLevel = skillsArray[skillsArray.length - 1].match(/\(Relevant skill(s?) level: (.*?)\)/)
+      skillLevel = skillLevel[skillLevel.length - 1]
+
+      _skills.push( {
+        name: $(skill).find('strong').text(),
+        description: description,
+        requirements: skillsArray.slice(1, -1).map(n => n.trim() + "."),
+        level: skillLevel
       })
-      data.subroles[i].skills = _skills
     })
 
     return {
@@ -115,7 +102,7 @@ const RoleGuidanceService = {
       summary_pretext: data.summary_pretext,
       summary: data.summary,
       summary_posttext: data.summary_posttext,
-      subroles: data.subroles,
+      skills: _skills,
     }
   },
 }
