@@ -2,6 +2,25 @@ import GovukContentApiService from './GovukContentApiService'
 import * as cheerio from 'cheerio'
 import { upperFirst } from 'lodash'
 
+const level_requirements = {
+  awareness: [
+    "You know about the skill and have an appreciation of how it is applied in the environment.",
+  ],
+  working: [
+    "You can apply your knowledge and experience of the skill, including tools and techniques.",
+    "You can adopt those most appropriate for the environment.",
+  ],
+  practitioner: [
+    "You know how to share your knowledge and experience of this skill with others, including tools and techniques.",
+    "You can define those most appropriate for the environment.",
+  ],
+  expert: [
+    "You have both knowledge and experience in the application of this skill.",
+    "You are a recognised specialist and adviser in this skill including user needs, generation of ideas, methods and tools.",
+    "You can lead or guide others in best-practice use.",
+  ],
+}
+
 const RoleGuidanceService = {
   async getGuidance(roleId) {
     const content = await GovukContentApiService.getContentApi(`/guidance/${roleId}`)
@@ -15,10 +34,10 @@ const RoleGuidanceService = {
     })
 
     let roleData = {
-      "@source_url": `https://www.gov.uk/guidance/${roleId}`,
       id: content.content_id,
       title: content.title,
       description: content.description,
+      govuk_url: `https://www.gov.uk/guidance/${roleId}`,
       last_updated_at: content.updated_at,
       introduction: introduction,
       levels: roleLevels,
@@ -93,6 +112,7 @@ const RoleGuidanceService = {
         name: $(skill).find('strong').text().replace('.', '').trim(),
         requirements: skillsArray.slice(1, -1).map(n => n.trim() + "."),
         level: upperFirst(skillLevel),
+        level_requirements: level_requirements[skillLevel],
       })
     })
 
