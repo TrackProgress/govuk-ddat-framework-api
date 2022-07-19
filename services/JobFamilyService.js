@@ -16,6 +16,7 @@ const JobFamilyService = {
 
       jobFamilyList.push({
         id: id,
+        category: familyName.replace('job family', '').replace('(QAT)', '').trim(),
         name: familyName,
         roles: roles,
       })
