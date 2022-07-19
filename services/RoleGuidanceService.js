@@ -1,5 +1,6 @@
 import GovukContentApiService from './GovukContentApiService'
-import * as cheerio from 'cheerio';
+import * as cheerio from 'cheerio'
+import { upperFirst } from 'lodash'
 
 const RoleGuidanceService = {
   async getGuidance(roleId) {
@@ -40,7 +41,7 @@ const RoleGuidanceService = {
 
     _skillsSection.each( (i, skill) => {
       skills.push( {
-        name: $(skill).find('strong').text(),
+        name: $(skill).find('strong').text().replace('.', '').trim(),
         description: $(skill).text().split(".").slice(1).join(". ").trim(),
       } )
     })
@@ -85,15 +86,13 @@ const RoleGuidanceService = {
     let _skills = []
     data.skills.each( (i, skill) => {
       let skillsArray = $(skill).text().split(".").filter(n => n)
-      let description = skillsArray.slice(1, -1).join(". ").trim() + "."
       let skillLevel = skillsArray[skillsArray.length - 1].match(/\(Relevant skill(s?) level: (.*?)\)/)
       skillLevel = skillLevel[skillLevel.length - 1]
 
       _skills.push( {
-        name: $(skill).find('strong').text(),
-        description: description,
+        name: $(skill).find('strong').text().replace('.', '').trim(),
         requirements: skillsArray.slice(1, -1).map(n => n.trim() + "."),
-        level: skillLevel
+        level: upperFirst(skillLevel),
       })
     })
 
