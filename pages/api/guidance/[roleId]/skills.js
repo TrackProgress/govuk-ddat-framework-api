@@ -22,6 +22,7 @@ export default async function handler(req, res) {
         skillDesc = skillDesc ? skillDesc.description : null
 
         _skills[id] = {
+          id: id,
           name: name,
           type: "skill",
           description: skillDesc,
