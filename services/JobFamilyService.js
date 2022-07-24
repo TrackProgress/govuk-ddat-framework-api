@@ -1,5 +1,6 @@
 import GovukContentApiService from './GovukContentApiService'
 import * as cheerio from 'cheerio';
+import { kebabCase } from 'lodash';
 
 const JobFamilyService = {
   async getJobFamilyList(url = '') {
@@ -11,12 +12,13 @@ const JobFamilyService = {
 
     $('.group-title').each( (i, jobFamilyElement) => {
       let familyName = $(jobFamilyElement).text()
-      let id = familyName.toLowerCase().replace(/\s+/g, '-')
+      let category = familyName.replace('job family', '').replace('(QAT)', '').trim()
+      let id =  kebabCase(category)
       let roles = this.getRoles($, jobFamilyElement, url)
 
       jobFamilyList.push({
         id: id,
-        category: familyName.replace('job family', '').replace('(QAT)', '').trim(),
+        category: category,
         name: familyName,
         roles: roles,
       })
