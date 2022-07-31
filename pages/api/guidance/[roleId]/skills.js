@@ -7,6 +7,7 @@ export default async function handler(req, res) {
   let data = {
     id: role.id,
     title: role.title,
+    introduction: role.introduction,
     skills: []
   }
 
