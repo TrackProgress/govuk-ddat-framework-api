@@ -105,7 +105,8 @@ const RoleGuidanceService = {
     let _skills = []
     data.skills.each( (i, skill) => {
       let skillsArray = $(skill).text().split(".").filter(n => n)
-      let skillLevel = skillsArray[skillsArray.length - 1].match(/\(Relevant skill(s?) level: (.*?)\)/)
+      let skillLevel = skillsArray[skillsArray.length - 1].match(/\(Skill level: (.*?)\)/)
+
       skillLevel = skillLevel[skillLevel.length - 1]
 
       _skills.push( {
