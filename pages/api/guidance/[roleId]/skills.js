@@ -7,6 +7,7 @@ export default async function handler(req, res) {
   let data = {
     id: role.id,
     title: role.title,
+    description: role.description,
     introduction: role.introduction,
     skills: []
   }
@@ -15,7 +16,7 @@ export default async function handler(req, res) {
 
   role.levels.forEach( level => {
     level.skills.forEach( skill => {
-      let name = `${skill.name} as a ${role.title}`
+      let name = skill.name
       let id = kebabCase(name)
 
       if (!_skills[id]) {
