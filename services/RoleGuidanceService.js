@@ -76,8 +76,6 @@ const RoleGuidanceService = {
       } )
     })
 
-    console.log(skills)
-
     return skills
   },
 
