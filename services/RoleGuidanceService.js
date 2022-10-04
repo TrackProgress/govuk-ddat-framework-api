@@ -51,10 +51,12 @@ const RoleGuidanceService = {
 
   validateData( roleData ) {
     let error_messages = []
+    let minor_error_messages = []
 
     let validations = {
       has_errors: false,
-      error_messages: error_messages,
+      major_error_messages: error_messages,
+      minor_error_messages: minor_error_messages,
       title: roleData.title.length ? true : false,
       description: roleData.description.length ? true : false,
       last_updated_at: roleData.last_updated_at.length ? true : false,
@@ -111,8 +113,8 @@ const RoleGuidanceService = {
 
         // validate level
         if ( !validation.title ) error_messages.push(`title is missing for levels.${levelIndex}`)
-        if ( !validation.summary_pretext ) error_messages.push(`summary_pretext is missing for levels.${levelIndex}`)
-        if ( !validation.summary ) error_messages.push(`summary is missing for levels.${levelIndex}`)
+        if ( !validation.summary_pretext ) minor_error_messages.push(`summary_pretext is missing for levels.${levelIndex}`)
+        if ( !validation.summary ) minor_error_messages.push(`summary is missing for levels.${levelIndex}`)
         if ( !validation.skills_count ) error_messages.push(`skills is missing for levels.${levelIndex}`)
 
         return validation
@@ -126,8 +128,8 @@ const RoleGuidanceService = {
 
     // validate introduction
     if ( !validations.introduction.title ) error_messages.push(`title is missing for introduction`)
-    if ( !validations.introduction.summary_pretext ) error_messages.push(`summary_pretext is missing for introduction`)
-    if ( !validations.introduction.summary ) error_messages.push(`summary is missing for introduction`)
+    if ( !validations.introduction.summary_pretext ) minor_error_messages.push(`summary_pretext is missing for introduction`)
+    if ( !validations.introduction.summary ) minor_error_messages.push(`summary is missing for introduction`)
     if ( !validations.introduction.skills_subheading ) error_messages.push(`skills_subheading is missing for introduction`)
     if ( !validations.introduction.skills_count ) error_messages.push(`skills is missing for introduction`)
 
