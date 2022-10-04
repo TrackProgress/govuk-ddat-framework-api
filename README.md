@@ -38,8 +38,3 @@ Bring back all skills required for a role (regardless of level)
 http://localhost:3000/api/guidance/{roleId}/skills
 ```
 
-## Production URL
-
-```
-https://ddat.api.trackprogress.io/api/
-```
