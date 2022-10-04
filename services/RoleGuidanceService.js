@@ -86,9 +86,9 @@ const RoleGuidanceService = {
         let validation = {
           title_label: level.title,
           title: level.title.length ? true : false,
-          summary_pretext: level.summary_pretext.length ? true : false,
-          summary_count: level.summary.length,
-          summary: level.summary.length ? true : false,
+          summary_pretext: level.summary_pretext && level.summary_pretext.length ? true : false,
+          summary_count: level.summary && level.summary.length,
+          summary: level.summary && level.summary.length ? true : false,
           skills_count: level.skills.length,
           skills: level.skills.map( (skill, levelSkillIndex) => {
             let validation = {
