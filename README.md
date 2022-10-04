@@ -43,6 +43,6 @@ http://localhost:3000/api/guidance/{roleId}/skills
 Validate that we have the correct data
 
 ```
-http://localhost:3000/api/guidance/{roleId}/skills
+http://localhost:3000/api/validate
 ```
 
