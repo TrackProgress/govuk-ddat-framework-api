@@ -48,22 +48,12 @@ const RoleGuidanceService = {
 
   getIntroSection($, section) {
     let summary = []
-    let skills = []
 
     section.next().next().find('li').each( (i, skill) => {
       summary.push( $(skill).text() )
     })
 
-    let _skillsSection = summary.length
-      ? section.next().next().next().next().next().find('li')
-      : section.next().next().next().next().find('li')
-
-    _skillsSection.each( (i, skill) => {
-      skills.push( {
-        name: $(skill).find('strong').text().replace('.', '').trim(),
-        description: $(skill).text().split(".").slice(1).join(". ").trim(),
-      } )
-    })
+    let skills = this.getSkills($)
 
     return {
       title: section.text(),
@@ -72,6 +62,23 @@ const RoleGuidanceService = {
       skills_subheading: section.next().next().next().text(),
       skills: skills,
     }
+  },
+
+  getSkills($) {
+    let skills = []
+    let skillsNeededHeader = $("h3[id^='skills-needed-to-be']")
+    let _skillsSection = skillsNeededHeader.next().next().find('li')
+
+    _skillsSection.each( (i, skill) => {
+      skills.push( {
+        name: $(skill).find('strong').text().replace('.', '').trim(),
+        description: $(skill).text().split(".").slice(1).join(". ").trim(),
+      } )
+    })
+
+    console.log(skills)
+
+    return skills
   },
 
   getRoleLevelData($, section) {
