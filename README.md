@@ -38,3 +38,11 @@ Bring back all skills required for a role (regardless of level)
 http://localhost:3000/api/guidance/{roleId}/skills
 ```
 
+### Validate API
+
+Validate that we have the correct data
+
+```
+http://localhost:3000/api/guidance/{roleId}/skills
+```
+
