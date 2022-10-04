@@ -35,6 +35,7 @@ const RoleGuidanceService = {
 
     let roleData = {
       id: content.content_id,
+      validation_checks: {},
       title: content.title,
       description: content.description,
       govuk_url: `https://www.gov.uk/guidance/${roleId}`,
@@ -43,7 +44,96 @@ const RoleGuidanceService = {
       levels: roleLevels,
     }
 
+    roleData.validation_checks = this.validateData( roleData )
+
     return roleData
+  },
+
+  validateData( roleData ) {
+    let error_messages = []
+
+    let validations = {
+      has_errors: false,
+      error_messages: error_messages,
+      title: roleData.title.length ? true : false,
+      description: roleData.description.length ? true : false,
+      last_updated_at: roleData.last_updated_at.length ? true : false,
+      introduction: {
+        title: roleData.introduction.title.length ? true : false,
+        summary_pretext: roleData.introduction.summary_pretext.length ? true : false,
+        summary_count: roleData.introduction.summary.length,
+        summary: roleData.introduction.summary.length ? true : false,
+        skills_subheading: roleData.introduction.skills_subheading.length ? true : false,
+        skills_count: roleData.introduction.skills.length,
+        skills: roleData.introduction.skills.map( (skill, index) => {
+          let validation = {
+            name_label: skill.name,
+            name: skill.name.length ? true : false,
+            description: skill.description.length ? true : false,
+          }
+
+          // validate introduction skills
+          if ( !validation.name ) error_messages.push(`Name is missing for introduction.skills.${index}`)
+          if ( !validation.description ) error_messages.push(`Description is missing for introduction.skills.${index}`)
+
+          return validation
+        })
+      },
+      levels_count: roleData.levels.length,
+      levels: roleData.levels.map( (level, levelIndex) => {
+        let validation = {
+          title_label: level.title,
+          title: level.title.length ? true : false,
+          summary_pretext: level.summary_pretext.length ? true : false,
+          summary_count: level.summary.length,
+          summary: level.summary.length ? true : false,
+          skills_count: level.skills.length,
+          skills: level.skills.map( (skill, levelSkillIndex) => {
+            let validation = {
+              name_label: skill.name,
+              name: skill.name.length ? true : false,
+              requirements_count: skill.requirements.length,
+              requirements: skill.requirements.length ? true : false,
+              level: skill.level.length ? true : false,
+              level_requirements_count: skill.level_requirements.length,
+              level_requirements: skill.level_requirements.length ? true : false,
+            }
+
+            // validate level skills
+            if ( !validation.name ) error_messages.push(`name is missing for levels.${levelIndex}.skills.${levelSkillIndex}`)
+            if ( !validation.requirements ) error_messages.push(`requirements is missing for levels.${levelIndex}.skills.${levelSkillIndex}`)
+            if ( !validation.level ) error_messages.push(`level is missing for levels.${levelIndex}.skills.${levelSkillIndex}`)
+            if ( !validation.level_requirements ) error_messages.push(`level_requirements is missing for levels.${levelIndex}.skills.${levelSkillIndex}`)
+
+            return validation
+          })
+        }
+
+        // validate level
+        if ( !validation.title ) error_messages.push(`title is missing for levels.${levelIndex}`)
+        if ( !validation.summary_pretext ) error_messages.push(`summary_pretext is missing for levels.${levelIndex}`)
+        if ( !validation.summary ) error_messages.push(`summary is missing for levels.${levelIndex}`)
+        if ( !validation.skills_count ) error_messages.push(`skills is missing for levels.${levelIndex}`)
+
+        return validation
+      })
+    }
+
+    // validate default meta
+    if ( !validations.title ) error_messages.push(`title is missing`)
+    if ( !validations.description ) error_messages.push(`description is missing`)
+    if ( !validations.last_updated_at ) error_messages.push(`last_updated_at is missing`)
+
+    // validate introduction
+    if ( !validations.introduction.title ) error_messages.push(`title is missing for introduction`)
+    if ( !validations.introduction.summary_pretext ) error_messages.push(`summary_pretext is missing for introduction`)
+    if ( !validations.introduction.summary ) error_messages.push(`summary is missing for introduction`)
+    if ( !validations.introduction.skills_subheading ) error_messages.push(`skills_subheading is missing for introduction`)
+    if ( !validations.introduction.skills_count ) error_messages.push(`skills is missing for introduction`)
+
+    validations.has_errors = error_messages.length ? true : false
+
+    return validations
   },
 
   getIntroSection($, section) {
