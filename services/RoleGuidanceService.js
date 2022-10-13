@@ -30,7 +30,7 @@ const RoleGuidanceService = {
     let introduction = this.getIntroSection($, $(sections).first())
 
     sections.slice(1, -1).each( (i, section) => {
-      roleLevels.push( this.getRoleLevelData($, $(section)) )
+      roleLevels.push( this.getRoleLevelData($, $(section), i) )
     })
 
     let roleData = {
@@ -171,7 +171,7 @@ const RoleGuidanceService = {
     return skills
   },
 
-  getRoleLevelData($, section) {
+  getRoleLevelData($, section, index) {
     let data = {
       title: $(section).text(),
       skills: [],
@@ -197,7 +197,7 @@ const RoleGuidanceService = {
       _nextSection = _nextSection.next()
     }
 
-    data.skills = _nextSection.next().find('li')
+    data.skills = $(`h3[id='skills-needed-for-this-role-level${index === 0 ? "" : `-${index}`}']`).next().find('li')
 
     let _skills = []
     data.skills.each( (i, skill) => {
