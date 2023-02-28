@@ -22,7 +22,7 @@ const level_requirements = {
 }
 
 const RoleGuidanceService = {
-  async getGuidance(roleId) {
+  async getGuidance(roleId, debug = false) {
     const content = await GovukContentApiService.getContentApi(`/guidance/${roleId}`)
     const $ = cheerio.load(content.details.body)
     let sections = $('h2')
@@ -44,7 +44,11 @@ const RoleGuidanceService = {
       levels: roleLevels,
     }
 
-    roleData.validation_checks = this.validateData( roleData )
+    if (debug) {
+      roleData.validation_checks = this.validateData( roleData )
+    } else {
+      delete(roleData.validation_checks)
+    }
 
     return roleData
   },
